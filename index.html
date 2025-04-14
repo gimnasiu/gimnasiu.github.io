@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кабінет інформатики</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .terminal-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .terminal {
+            width: 80%;
+            max-width: 800px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+            overflow: hidden;
+            color: #00ff00;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+        
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            color: rgba(204, 204, 204, 0.8);
+            font-size: 0.8em;
+        }
+        
+        .terminal-buttons {
+            display: flex;
+            margin-right: 10px;
+        }
+        
+        .terminal-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            opacity: 0.8;
+        }
+        
+        .btn-red { background-color: #ff5f56; }
+        .btn-yellow { background-color: #ffbd2e; }
+        .btn-green { background-color: #27c93f; }
+        
+        .terminal-title {
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+        
+        .terminal-body {
+            line-height: 1.5;
+            min-height: 120px;
+        }
+        
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background-color: #00ff00;
+            animation: blink 1s infinite;
+            vertical-align: middle;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        .footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .clickable-text {
+            color: #0066cc;
+            text-decoration: none;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            font-size: 1.1em;
+            padding: 10px 20px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .clickable-text:hover {
+            text-decoration: underline;
+            background-color: rgba(0, 102, 204, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal-container">
+        <div class="terminal">
+            <div class="terminal-header">
+                <div class="terminal-buttons">
+                    <div class="terminal-btn btn-red"></div>
+                    <div class="terminal-btn btn-yellow"></div>
+                    <div class="terminal-btn btn-green"></div>
+                </div>
+                <div class="terminal-title">Міняйлівська гімназія Петропавлівської сільської ради Білгород-Дністровського району Одеської області</div>
+            </div>
+            <div class="terminal-body" id="terminalOutput"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <a href="https://sites.google.com/view/gimnasiu0" class="clickable-text">
+            Інформатика @ 2006-<span id="currentYear"></span>
+        </a>
+    </div>
+
+    <script>
+        // Terminal animation
+        const terminal = document.getElementById('terminalOutput');
+        const lines = [
+            "> Вітаю на Інтернет-сторінці кабінету інформатики!",
+            "> У кабінеті інформатики проводяться уроки з мультимедійним обладнанням та комп'ютерною технікою.",
+            "> Завантаження ресурсів відображення даних...",
+            "> Далі... Перевірка підключення.",
+            "> Статус: активний",
+            "> Останній вхід: " + new Date().toLocaleString('uk-UA'),
+            "> Чудово. Готово до роботи!",
+            "> _"
+        ];
+        
+        let currentLine = 0;
+        let currentChar = 0;
+        let isDeleting = false;
+        
+        function typeWriter() {
+            if (currentLine < lines.length) {
+                const line = lines[currentLine];
+                
+                if (!isDeleting && currentChar <= line.length) {
+                    terminal.innerHTML = lines.slice(0, currentLine).join('<br>') + '<br>' + line.substring(0, currentChar) + '<span class="cursor"></span>';
+                    currentChar++;
+                    setTimeout(typeWriter, currentChar === line.length ? 1000 : Math.random() * 50 + 50);
+                } 
+                else if (isDeleting && currentChar >= 0) {
+                    terminal.innerHTML = lines.slice(0, currentLine).join('<br>') + '<br>' + line.substring(0, currentChar) + '<span class="cursor"></span>';
+                    currentChar--;
+                    setTimeout(typeWriter, 30);
+                } 
+                else {
+                    isDeleting = !isDeleting;
+                    if (!isDeleting) currentLine++;
+                    setTimeout(typeWriter, 500);
+                }
+            } else {
+                currentLine = 0;
+                currentChar = 0;
+                isDeleting = false;
+                terminal.innerHTML = '';
+                setTimeout(typeWriter, 1000);
+            }
+        }
+        
+        // Current year for footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // Start animation
+        setTimeout(typeWriter, 1000);
+    </script>
+</body>
+</html>
