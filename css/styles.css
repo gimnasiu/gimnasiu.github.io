@@ -100,6 +100,120 @@ body {
     padding: 30px;
 }
 
+/* Стилі для розділу безпеки */
+.safety-section {
+    background-color: white;
+    border-radius: 10px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+}
+
+.safety-section h1 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2em;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 15px;
+}
+
+.rules-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.basic-rules, .prohibited-rules {
+    margin-bottom: 25px;
+}
+
+.rules-list, .prohibited-list, .emergency-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.rules-list li, .prohibited-list li, .emergency-list li {
+    padding: 12px 15px 12px 50px;
+    margin-bottom: 10px;
+    position: relative;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.rules-list li {
+    background-color: #f8f9fa;
+    border-left: 4px solid #3498db;
+}
+
+.prohibited-list li {
+    background-color: #fff5f5;
+    border-left: 4px solid #e74c3c;
+}
+
+.emergency-list li {
+    background-color: #fff8e1;
+    border-left: 4px solid #ffc107;
+}
+
+.rules-list li:hover, .prohibited-list li:hover, .emergency-list li:hover {
+    transform: translateX(5px);
+}
+
+.rules-list i, .prohibited-list i, .emergency-list i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2em;
+}
+
+.danger-icon {
+    color: #e74c3c;
+}
+
+.warning-icon {
+    color: #ff9800;
+}
+
+.prohibited-icon {
+    color: #c62828;
+}
+
+.emergency-icon {
+    color: #f44336;
+}
+
+.warning-notice {
+    background: linear-gradient(to right, #fff8e1, #fff3e0);
+    padding: 15px;
+    border-radius: 5px;
+    border-left: 4px solid #ffc107;
+    margin: 25px 0;
+    font-size: 1.1em;
+}
+
+.emergency-alert {
+    margin-top: 30px;
+}
+
+.safety-footer {
+    margin-top: 30px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    text-align: center;
+    font-style: italic;
+}
+
+/* Футер */
+footer {
+    background-color: var(--primary-color);
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+}
+
 /* Адаптивність */
 @media (max-width: 768px) {
     .main-menu {
@@ -120,13 +234,33 @@ body {
     .nav-container {
         padding: 0;
     }
+
+    .safety-section {
+        padding: 20px 15px;
+    }
+    
+    .rules-list li, .prohibited-list li, .emergency-list li {
+        padding: 10px 10px 10px 40px;
+    }
 }
 
-/* Футер */
-footer {
-    background-color: var(--primary-color);
-    color: white;
+/* Додаткові стилі для контенту */
+.center {
     text-align: center;
-    padding: 20px;
-    margin-top: 40px;
+}
+
+.back-link {
+    color: #3498db;
+    display: inline-flex;
+    align-items: center;
+}
+
+.drive-link {
+    color: #4285F4;
+    display: inline-flex;
+    align-items: center;
+}
+
+.back-link i, .drive-link i {
+    margin-right: 8px;
 }
