@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Кабінет інформатики - Міняйлівська гімназія</title>
+    <!-- Іконка сайту -->
+    <link rel="icon" href="https://github.com/gimnasiu/0/blob/main/image/icon_pc.png?raw=true" type="image/png">
     <style>
         /* Глобальні стилі */
         body {
@@ -17,20 +19,14 @@
             min-height: 100vh;
         }
         
-        /* Верхній колонтитул з зображенням */
-        .header-image {
+        /* Верхній колонтитул */
+        .header-banner {
             width: 100%;
-            height: 120px;
             background-color: #2c3e50;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             color: white;
-            font-size: 1.5em;
             text-align: center;
-            background-image: url('https://drive.google.com/file/d/1oBQTSuIJYm-dr8A4B-XYgsAd0UhBRX1M/view?text=Міняйлівська гімназія+Лого');
-            background-size: cover;
-            background-position: center;
+            padding: 15px 0;
+            font-size: 1.2em;
         }
         
         /* Термінал */
@@ -42,6 +38,51 @@
             font-family: 'Courier New', monospace;
             text-align: center;
             border-bottom: 3px solid #00ff00;
+        }
+        
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            color: rgba(204, 204, 204, 0.8);
+            font-size: 0.9em;
+        }
+        
+        .terminal-buttons {
+            display: flex;
+            margin-right: 10px;
+        }
+        
+        .terminal-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            opacity: 0.8;
+        }
+        
+        .btn-red { background-color: #ff5f56; }
+        .btn-yellow { background-color: #ffbd2e; }
+        .btn-green { background-color: #27c93f; }
+        
+        .terminal-body {
+            line-height: 1.5;
+            min-height: 100px;
+        }
+        
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background-color: #00ff00;
+            animation: blink 1s infinite;
+            vertical-align: middle;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
         
         /* Навігаційне меню */
@@ -113,9 +154,12 @@
             line-height: 1.6;
         }
         
+        h1, h2 {
+            text-align: center;
+        }
+        
         h1 {
             color: #2c3e50;
-            text-align: center;
             margin-bottom: 30px;
             font-size: 2.2em;
         }
@@ -175,23 +219,26 @@
                 position: static;
                 width: 100%;
             }
-            
-            .header-image {
-                height: 80px;
-                font-size: 1.2em;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- Верхній колонтитул з зображенням -->
-    <div class="header-image">
+    <!-- Верхній колонтитул -->
+    <div class="header-banner">
         Міняйлівська гімназія Петропавлівської сільської ради Білгород-Дністровського району Одеської області
     </div>
     
     <!-- Термінал -->
     <div class="terminal">
-        Кабінет інформатики - сучасні технології навчання
+        <div class="terminal-header">
+            <div class="terminal-buttons">
+                <div class="terminal-btn btn-red"></div>
+                <div class="terminal-btn btn-yellow"></div>
+                <div class="terminal-btn btn-green"></div>
+            </div>
+            <div class="terminal-title">Кабінет інформатики</div>
+        </div>
+        <div class="terminal-body" id="terminalOutput"></div>
     </div>
     
     <!-- Головне меню -->
@@ -232,12 +279,12 @@
     <div class="main-content">
         <h1>Кабінет інформатики</h1>
         
-        <p><a href="https://sites.google.com/view/gimnasiu">← Перейти назад до Iнтернет-сайту Міняйлівської гімназії</a></p>
+        <p style="text-align: center;"><a href="https://sites.google.com/view/gimnasiu">← Перейти назад до Iнтернет-сайту Міняйлівської гімназії</a></p>
         
         <h2><a href="https://sites.google.com/view/gimnasiu0">Інформатична тека на Google Drive</a></h2>
         
         <h2>На уроці інформатики</h2>
-        <p>Google Chromebook на уроках інформатики</p>
+        <p style="text-align: center;">Google Chromebook на уроках інформатики</p>
         
         <h2>Правила безпеки в комп'ютерному класі</h2>
         
@@ -283,6 +330,53 @@
     <script>
         // Встановлюємо поточний рік у футері
         document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // Анімація терміналу
+        const terminal = document.getElementById('terminalOutput');
+        const lines = [
+            "> Вітаю на Інтернет-сторінці кабінету інформатики!",
+            "> У кабінеті інформатики проводяться уроки з мультимедійним обладнанням та комп'ютерною технікою.",
+            "> Завантаження ресурсів відображення даних...",
+            "> Далі... Перевірка підключення.",
+            "> Статус: активний",
+            "> Останній вхід: " + new Date().toLocaleString('uk-UA'),
+            "> Чудово. Готово до роботи!",
+            "> _"
+        ];
+        
+        let currentLine = 0;
+        let currentChar = 0;
+        let isDeleting = false;
+        
+        function typeWriter() {
+            if (currentLine < lines.length) {
+                const line = lines[currentLine];
+                
+                if (!isDeleting && currentChar <= line.length) {
+                    terminal.innerHTML = lines.slice(0, currentLine).join('<br>') + '<br>' + line.substring(0, currentChar) + '<span class="cursor"></span>';
+                    currentChar++;
+                    setTimeout(typeWriter, currentChar === line.length ? 1000 : Math.random() * 50 + 50);
+                } 
+                else if (isDeleting && currentChar >= 0) {
+                    terminal.innerHTML = lines.slice(0, currentLine).join('<br>') + '<br>' + line.substring(0, currentChar) + '<span class="cursor"></span>';
+                    currentChar--;
+                    setTimeout(typeWriter, 30);
+                } 
+                else {
+                    isDeleting = !isDeleting;
+                    if (!isDeleting) currentLine++;
+                    setTimeout(typeWriter, 500);
+                }
+            } else {
+                currentLine = 0;
+                currentChar = 0;
+                isDeleting = false;
+                terminal.innerHTML = '';
+                setTimeout(typeWriter, 1000);
+            }
+        }
+        
+        setTimeout(typeWriter, 1000);
     </script>
 </body>
 </html>
