@@ -1,26 +1,17 @@
-/* Контейнер терміналу з прозорим фоном */
 .terminal-container {
     background-color: transparent;
     padding: 20px 0;
 }
 
-/* Сам термінал з напівпрозорим фоном */
 .terminal {
     width: 90%;
     max-width: 800px;
     margin: 0 auto;
-    background-color: rgba(30, 30, 30, 0.85); /* Напівпрозорий чорний */
+    background-color: rgba(30, 30, 30, 0.9); /* 90% прозорості */
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
-    border: 1px solid rgba(0, 255, 0, 0.3);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.15);
+    border: 1px solid rgba(0, 255, 0, 0.2);
 }
 
-/* Інші стилі терміналу залишаються без змін */
-.terminal-header {
-    display: flex;
-    align-items: center;
-    background-color: rgba(51, 51, 51, 0.9);
-    padding: 8px 15px;
-    border-bottom: 1px solid rgba(0, 255, 0, 0.2);
-}
+/* Решта стилів терміналу залишаються незмінними */
