@@ -4,223 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Кабінет інформатики - Міняйлівська гімназія</title>
-    <!-- Іконка сайту -->
-    <link rel="icon" href="https://github.com/gimnasiu/0/blob/main/image/icon_pc.png?raw=true" type="image/png">
-    <style>
-        /* Глобальні стилі */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        
-        /* Верхній колонтитул */
-        .header-banner {
-            width: 100%;
-            background-color: #2c3e50;
-            color: white;
-            text-align: center;
-            padding: 15px 0;
-            font-size: 1.2em;
-        }
-        
-        /* Термінал */
-        .terminal {
-            width: 100%;
-            background-color: #000;
-            color: #00ff00;
-            padding: 15px 0;
-            font-family: 'Courier New', monospace;
-            text-align: center;
-            border-bottom: 3px solid #00ff00;
-        }
-        
-        .terminal-header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 10px;
-            color: rgba(204, 204, 204, 0.8);
-            font-size: 0.9em;
-        }
-        
-        .terminal-buttons {
-            display: flex;
-            margin-right: 10px;
-        }
-        
-        .terminal-btn {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-right: 8px;
-            opacity: 0.8;
-        }
-        
-        .btn-red { background-color: #ff5f56; }
-        .btn-yellow { background-color: #ffbd2e; }
-        .btn-green { background-color: #27c93f; }
-        
-        .terminal-body {
-            line-height: 1.5;
-            min-height: 100px;
-        }
-        
-        .cursor {
-            display: inline-block;
-            width: 10px;
-            height: 20px;
-            background-color: #00ff00;
-            animation: blink 1s infinite;
-            vertical-align: middle;
-        }
-        
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-        
-        /* Навігаційне меню */
-        .nav-container {
-            background-color: #2c3e50;
-            padding: 10px 0;
-        }
-        
-        .main-menu {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            flex-wrap: wrap;
-        }
-        
-        .menu-item {
-            position: relative;
-            margin: 0 10px;
-        }
-        
-        .menu-item a {
-            color: white;
-            text-decoration: none;
-            padding: 10px 15px;
-            display: block;
-            transition: background 0.3s;
-        }
-        
-        .menu-item a:hover {
-            background-color: #34495e;
-        }
-        
-        /* Випадаюче меню */
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            background-color: #fff;
-            min-width: 200px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            z-index: 1;
-            border-radius: 4px;
-        }
-        
-        .dropdown:hover .dropdown-menu {
-            display: block;
-        }
-        
-        .dropdown-menu a {
-            color: #333;
-            padding: 10px 15px;
-            display: block;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .dropdown-menu a:hover {
-            background-color: #f1f1f1;
-        }
-        
-        /* Основний контент */
-        .main-content {
-            flex: 1;
-            padding: 30px;
-            max-width: 900px;
-            margin: 0 auto;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            line-height: 1.6;
-        }
-        
-        h1, h2 {
-            text-align: center;
-        }
-        
-        h1 {
-            color: #2c3e50;
-            margin-bottom: 30px;
-            font-size: 2.2em;
-        }
-        
-        h2 {
-            color: #e74c3c;
-            margin-top: 30px;
-            font-size: 1.8em;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 5px;
-        }
-        
-        .important {
-            color: #e74c3c;
-            font-weight: bold;
-            font-size: 1.1em;
-        }
-        
-        .warning {
-            background-color: #fff8e1;
-            padding: 15px;
-            border-left: 4px solid #ffc107;
-            margin: 20px 0;
-        }
-        
-        /* Футер */
-        footer {
-            background-color: #2c3e50;
-            color: white;
-            text-align: center;
-            padding: 15px;
-            margin-top: 30px;
-        }
-        
-        /* Посилання */
-        a {
-            color: #3498db;
-            text-decoration: none;
-        }
-        
-        a:hover {
-            text-decoration: underline;
-        }
-        
-        /* Адаптивність */
-        @media (max-width: 768px) {
-            .main-menu {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .menu-item {
-                margin: 5px 0;
-            }
-            
-            .dropdown-menu {
-                position: static;
-                width: 100%;
-            }
-        }
-    </style>
+    <link rel="icon" href="images/icon_pc.png" type="image/png">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/terminal.css">
 </head>
 <body>
     <!-- Верхній колонтитул -->
@@ -229,154 +15,66 @@
     </div>
     
     <!-- Термінал -->
-    <div class="terminal">
-        <div class="terminal-header">
-            <div class="terminal-buttons">
-                <div class="terminal-btn btn-red"></div>
-                <div class="terminal-btn btn-yellow"></div>
-                <div class="terminal-btn btn-green"></div>
+    <div class="terminal-container">
+        <div class="terminal">
+            <div class="terminal-header">
+                <div class="terminal-controls">
+                    <div class="control close"></div>
+                    <div class="control minimize"></div>
+                    <div class="control maximize"></div>
+                </div>
+                <div class="terminal-title">Кабінет інформатики</div>
             </div>
-            <div class="terminal-title">Кабінет інформатики</div>
+            <div class="terminal-body" id="terminalOutput"></div>
         </div>
-        <div class="terminal-body" id="terminalOutput"></div>
     </div>
     
     <!-- Головне меню -->
-    <div class="nav-container">
+    <nav class="main-nav">
         <ul class="main-menu">
-            <li class="menu-item"><a href="#">Головна сторінка</a></li>
-            <li class="menu-item"><a href="#">Бобер</a></li>
-            <li class="menu-item"><a href="#">Безпечний Інтернет</a></li>
-            <li class="menu-item dropdown">
+            <li><a href="#">Головна сторінка</a></li>
+            <li><a href="#">Бобер</a></li>
+            <li><a href="#">Безпечний Інтернет</a></li>
+            <li class="dropdown">
                 <a href="#">Уроки</a>
-                <div class="dropdown-menu">
-                    <a href="#">Всеукраїнська учнівська Інтернет-олімпіада з інформаційних технологій</a>
-                    <a href="#">Відкриті уроки</a>
-                    <a href="#">5 клас</a>
-                    <a href="#">6 клас</a>
-                    <a href="#">7 клас</a>
-                    <a href="#">8 клас</a>
-                    <a href="#">9 клас</a>
-                    <a href="#">10 клас</a>
-                    <a href="#">11 клас</a>
-                    <a href="#">Підручники</a>
-                    <a href="#">Практичні роботи</a>
-                </div>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Всеукраїнська учнівська Інтернет-олімпіада</a></li>
+                    <li><a href="#">5 клас</a></li>
+                    <li><a href="#">6 клас</a></li>
+                    <li><a href="#">7 клас</a></li>
+                    <li><a href="#">8 клас</a></li>
+                    <li><a href="#">9 клас</a></li>
+                    <li><a href="#">10 клас</a></li>
+                    <li><a href="#">11 клас</a></li>
+                </ul>
             </li>
-            <li class="menu-item dropdown">
+            <li class="dropdown">
                 <a href="#">Програмне забезпечення</a>
-                <div class="dropdown-menu">
-                    <a href="#">Інтернет-проекти учнів</a>
-                    <a href="#">Linux</a>
-                    <a href="#">Програмування Python</a>
-                    <a href="#">Paint - online</a>
-                </div>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Інтернет-проекти учнів</a></li>
+                    <li><a href="#">Linux</a></li>
+                    <li><a href="#">Програмування Python</a></li>
+                </ul>
             </li>
         </ul>
-    </div>
+    </nav>
     
     <!-- Основний контент -->
-    <div class="main-content">
+    <main class="content">
         <h1>Кабінет інформатики</h1>
+        <p class="center"><a href="https://sites.google.com/view/gimnasiu">← Перейти до сайту гімназії</a></p>
         
-        <p style="text-align: center;"><a href="https://sites.google.com/view/gimnasiu">← Перейти назад до Iнтернет-сайту Міняйлівської гімназії</a></p>
+        <h2>Інформатична тека на Google Drive</h2>
+        <p class="center"><a href="https://sites.google.com/view/gimnasiu0">Відкрити Google Drive</a></p>
         
-        <h2><a href="https://sites.google.com/view/gimnasiu0">Інформатична тека на Google Drive</a></h2>
-        
-        <h2>На уроці інформатики</h2>
-        <p style="text-align: center;">Google Chromebook на уроках інформатики</p>
-        
-        <h2>Правила безпеки в комп'ютерному класі</h2>
-        
-        <ol>
-            <li>Не вмикай комп'ютер без дозволу вчителя.</li>
-            <li>Не торкайся дротів і розеток.</li>
-            <li>Не клади речі на клавіатуру.</li>
-            <li>Не торкайся екрана монітора.</li>
-            <li>Не торкайся задніх стінок системного блока та монітора.</li>
-            <li>Не ремонтуй комп'ютер самотужки — негайно поклич учителя!</li>
-        </ol>
-        
-        <div class="warning">
-            <p class="important">Увага! У кабінеті встановлена складна апаратура (комп'ютери, принтери та інші технічні засоби), яка потребує обережного ставлення.</p>
-        </div>
-        
-        <h2 class="important">Зверни увагу! Суворо забороняється:</h2>
-        <ul>
-            <li>у верхньому одязі заходити до кабінету;</li>
-            <li>чіпати роз'єми з'єднувальних кабелів;</li>
-            <li>торкатися проводів живлення і пристроїв заземлення;</li>
-            <li>торкатися екрана з тильного боку монітора;</li>
-            <li>використовувати рідинні або аерозольні засоби для чищення поверхонь комп'ютера;</li>
-            <li>вмикати і вимикати апаратуру без вказівки вчителя;</li>
-            <li>класти зайві предмети на клавіатуру;</li>
-            <li>працювати у вологому одязі та вологими руками;</li>
-            <li>працювати на несправному комп'ютерному обладнанні;</li>
-            <li>самостійно намагатися усунути несправності;</li>
-            <li>закривати вентиляційні отвори апаратури, що може призвести до її перегрівання і виходу з ладу;</li>
-            <li>працювати понад встановлену норму часу роботи на комп'ютері.</li>
-        </ul>
-        
-        <div class="warning">
-            <p class="important">Зверни увагу! При появі запаху горілого відразу припиніть роботу і повідомте про це вчителя.</p>
-        </div>
-    </div>
+        <!-- Тут додайте інший контент -->
+    </main>
     
     <!-- Футер -->
     <footer>
         <p>Інформатика @ 2006-<span id="currentYear"></span> | Міняйлівська гімназія</p>
     </footer>
 
-    <script>
-        // Встановлюємо поточний рік у футері
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-        
-        // Анімація терміналу
-        const terminal = document.getElementById('terminalOutput');
-        const lines = [
-            "> Вітаю на Інтернет-сторінці кабінету інформатики!",
-            "> У кабінеті інформатики проводяться уроки з мультимедійним обладнанням та комп'ютерною технікою.",
-            "> Завантаження ресурсів відображення даних...",
-            "> Далі... Перевірка підключення.",
-            "> Статус: активний",
-            "> Останній вхід: " + new Date().toLocaleString('uk-UA'),
-            "> Чудово. Готово до роботи!",
-            "> _"
-        ];
-        
-        let currentLine = 0;
-        let currentChar = 0;
-        let isDeleting = false;
-        
-        function typeWriter() {
-            if (currentLine < lines.length) {
-                const line = lines[currentLine];
-                
-                if (!isDeleting && currentChar <= line.length) {
-                    terminal.innerHTML = lines.slice(0, currentLine).join('<br>') + '<br>' + line.substring(0, currentChar) + '<span class="cursor"></span>';
-                    currentChar++;
-                    setTimeout(typeWriter, currentChar === line.length ? 1000 : Math.random() * 50 + 50);
-                } 
-                else if (isDeleting && currentChar >= 0) {
-                    terminal.innerHTML = lines.slice(0, currentLine).join('<br>') + '<br>' + line.substring(0, currentChar) + '<span class="cursor"></span>';
-                    currentChar--;
-                    setTimeout(typeWriter, 30);
-                } 
-                else {
-                    isDeleting = !isDeleting;
-                    if (!isDeleting) currentLine++;
-                    setTimeout(typeWriter, 500);
-                }
-            } else {
-                currentLine = 0;
-                currentChar = 0;
-                isDeleting = false;
-                terminal.innerHTML = '';
-                setTimeout(typeWriter, 1000);
-            }
-        }
-        
-        setTimeout(typeWriter, 1000);
-    </script>
+    <script src="js/script.js"></script>
 </body>
 </html>
