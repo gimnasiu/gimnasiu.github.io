@@ -1,17 +1,68 @@
 .terminal-container {
     background-color: transparent;
-    padding: 20px 0;
+    padding: 20px 15px;
 }
 
 .terminal {
-    width: 90%;
-    max-width: 800px;
+    max-width: 1000px;
     margin: 0 auto;
-    background-color: rgba(30, 30, 30, 0.9); /* 90% прозорості */
+    background-color: rgba(30, 30, 30, 0.9);
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 0 20px rgba(0, 255, 0, 0.15);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     border: 1px solid rgba(0, 255, 0, 0.2);
 }
 
-/* Решта стилів терміналу залишаються незмінними */
+.terminal-header {
+    display: flex;
+    align-items: center;
+    background-color: rgba(51, 51, 51, 0.9);
+    padding: 10px 15px;
+    border-bottom: 1px solid rgba(0, 255, 0, 0.1);
+}
+
+.terminal-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.control {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.control.close { background-color: #ff5f56; }
+.control.minimize { background-color: #ffbd2e; }
+.control.maximize { background-color: #27c93f; }
+
+.terminal-title {
+    color: #aaa;
+    font-size: 0.9em;
+    margin-left: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.terminal-body {
+    padding: 20px;
+    color: #f0f0f0;
+    font-family: 'Courier New', monospace;
+    line-height: 1.5;
+    min-height: 120px;
+}
+
+.cursor {
+    display: inline-block;
+    width: 8px;
+    height: 16px;
+    background-color: #00ff00;
+    animation: blink 1s infinite;
+    vertical-align: middle;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
