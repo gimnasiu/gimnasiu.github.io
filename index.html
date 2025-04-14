@@ -10,12 +10,41 @@
     <link rel="stylesheet" href="css/terminal.css">
 </head>
 <body>
-    <!-- Верхній колонтитул -->
-    <div class="header-banner">
-        Міняйлівська гімназія Петропавлівської сільської ради Білгород-Дністровського району Одеської області
-    </div>
-    
-    <!-- Термінал з прозорістю 90% -->
+    <!-- Верхнє меню -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <ul class="main-menu">
+                <li><a href="#">Головна сторінка</a></li>
+                <li><a href="#">Бобер</a></li>
+                <li><a href="#">Безпечний Інтернет</a></li>
+                <li class="dropdown">
+                    <a href="#">Уроки <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Всеукраїнська олімпіада</a></li>
+                        <li><a href="#">5 клас</a></li>
+                        <li><a href="#">6 клас</a></li>
+                        <li><a href="#">7 клас</a></li>
+                        <li><a href="#">8 клас</a></li>
+                        <li><a href="#">9 клас</a></li>
+                        <li><a href="#">10 клас</a></li>
+                        <li><a href="#">11 клас</a></li>
+                        <li><a href="#">Підручники</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#">ПЗ <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Інтернет-проекти</a></li>
+                        <li><a href="#">Linux</a></li>
+                        <li><a href="#">Python</a></li>
+                        <li><a href="#">Paint Online</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Термінал -->
     <div class="terminal-container">
         <div class="terminal">
             <div class="terminal-header">
@@ -24,87 +53,19 @@
                     <div class="control minimize"></div>
                     <div class="control maximize"></div>
                 </div>
-                <div class="terminal-title">Кабінет інформатики</div>
+                <div class="terminal-title">Міняйлівська гімназія Петропавлівської сільської ради</div>
             </div>
             <div class="terminal-body" id="terminalOutput"></div>
         </div>
     </div>
-    
-    <!-- Головне меню -->
-    <nav class="main-nav">
-        <ul class="main-menu">
-            <li><a href="#">Головна сторінка</a></li>
-            <li><a href="#">Бобер</a></li>
-            <li><a href="#">Безпечний Інтернет</a></li>
-            <li class="dropdown">
-                <a href="#">Уроки</a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Всеукраїнська учнівська Інтернет-олімпіада</a></li>
-                    <li><a href="#">5 клас</a></li>
-                    <li><a href="#">6 клас</a></li>
-                    <li><a href="#">7 клас</a></li>
-                    <li><a href="#">8 клас</a></li>
-                    <li><a href="#">9 клас</a></li>
-                    <li><a href="#">10 клас</a></li>
-                    <li><a href="#">11 клас</a></li>
-                </ul>
-            </li>
-            <li class="dropdown">
-                <a href="#">Програмне забезпечення</a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Інтернет-проекти учнів</a></li>
-                    <li><a href="#">Linux</a></li>
-                    <li><a href="#">Програмування Python</a></li>
-                </ul>
-            </li>
-        </ul>
-    </nav>
-    
+
     <!-- Основний контент -->
-    <main class="content">
-        <h1><i class="fas fa-desktop"></i> Кабінет інформатики</h1>
-        <p class="center"><a href="https://sites.google.com/view/gimnasiu" class="back-link"><i class="fas fa-arrow-left"></i> Перейти до сайту гімназії</a></p>
-        
-        <h2><i class="fas fa-folder-open"></i> Інформатична тека на Google Drive</h2>
-        <p class="center"><a href="https://sites.google.com/view/gimnasiu0" class="drive-link"><i class="fab fa-google-drive"></i> Відкрити Google Drive</a></p>
-        
-        <!-- Повний текст правил безпеки -->
-        <section class="safety-rules">
-            <h2><i class="fas fa-shield-alt"></i> Правила безпеки в комп'ютерному класі</h2>
-            
-            <div class="rules-list">
-                <h3><i class="fas fa-list-ol"></i> Основні правила:</h3>
-                <ol class="styled-list">
-                    <li><i class="fas fa-ban danger-icon"></i> Не вмикати комп'ютер без дозволу вчителя</li>
-                    <li><i class="fas fa-plug danger-icon"></i> Не торкатися дротів і розеток</li>
-                    <li><i class="fas fa-keyboard danger-icon"></i> Не класти речі на клавіатуру</li>
-                    <li><i class="fas fa-tv danger-icon"></i> Не торкатися екрана монітора</li>
-                    <li><i class="fas fa-desktop danger-icon"></i> Не торкатися задніх стінок системного блока та монітора</li>
-                    <li><i class="fas fa-tools danger-icon"></i> Не ремонтувати комп'ютер самостійно - негайно повідомити вчителя!</li>
-                </ol>
-                
-                <div class="warning-box">
-                    <p><i class="fas fa-exclamation-triangle warning-icon"></i> Увага! У кабінеті встановлена складна апаратура (комп'ютери, принтери та інші технічні засоби), яка потребує обережного ставлення.</p>
-                </div>
-                
-                <h3><i class="fas fa-hand-paper prohibited-icon"></i> Суворо забороняється:</h3>
-                <ul class="prohibited-list">
-                    <li><i class="fas fa-tshirt"></i> Заходити до кабінету у верхньому одязі</li>
-                    <li><i class="fas fa-bolt"></i> Торкатися роз'ємів кабелів та проводів живлення</li>
-                    <li><i class="fas fa-spray-can"></i> Використовувати рідини для чищення апаратури</li>
-                    <li><i class="fas fa-power-off"></i> Вмикати/вимикати обладнання без дозволу</li>
-                    <li><i class="fas fa-tint"></i> Працювати з вологоми руками або одягом</li>
-                    <li><i class="fas fa-fan"></i> Закривати вентиляційні отвори техніки</li>
-                </ul>
-                
-                <div class="emergency-alert">
-                    <p><i class="fas fa-fire emergency-icon"></i> У разі появи запаху горілого, диму або іскріння - негайно вимкнути обладнання та повідомити вчителя!</p>
-                </div>
-            </div>
-        </section>
-    </main>
-    
-    <!-- Футер -->
+    <div class="page-container">
+        <main class="main-content">
+            <!-- Тут ваш контент з правилами безпеки -->
+        </main>
+    </div>
+
     <footer>
         <p><i class="far fa-copyright"></i> Інформатика @ 2006-<span id="currentYear"></span> | Міняйлівська гімназія</p>
     </footer>
