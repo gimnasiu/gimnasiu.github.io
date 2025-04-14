@@ -6,7 +6,7 @@
 }
 .terminal {
     background-color: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(5px); /* Ефект розмиття фону (опціонально) */
+  //  backdrop-filter: blur(5px); /* Ефект розмиття фону (опціонально) */
 }
 /* Фон за терміналом */
 .terminal-container {
@@ -21,7 +21,7 @@
 
 /* Прозорість терміналу (опціонально) */
 .terminal {
-    background-color: rgba(0, 0, 0, 0.7); /* Темний напівпрозорий фон */
+    background-color: rgba(0, 0, 0, 1.7); /* Темний напівпрозорий фон */
     border-radius: 8px;
     overflow: hidden;
 }
