@@ -1,18 +1,4 @@
-/* Фіксований термінал */
-.terminal-container {
-    position: fixed;
-    top: 60px; /* Відступ зверху - підлаштуй під висоту твого меню */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80%;
-    max-width: 900px;
-    z-index: 100;
-    background: url('https://gimnasiu.github.io/images/header-bg.jpg') no-repeat center center;
-    background-size: cover;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.5);
-}
+
 
 /* Основний контент - додаємо відступ, щоб не перекривався терміналом */
 .page-container {
