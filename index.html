@@ -17,11 +17,28 @@
             min-height: 100vh;
         }
         
-        /* Термінал-банер */
-        .terminal-banner {
+        /* Верхній колонтитул з зображенням */
+        .header-image {
+            width: 100%;
+            height: 120px;
+            background-color: #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5em;
+            text-align: center;
+            background-image: url('https://via.placeholder.com/1200x120/2c3e50/ffffff?text=Гімназія+Лого');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        /* Термінал */
+        .terminal {
+            width: 100%;
             background-color: #000;
             color: #00ff00;
-            padding: 15px;
+            padding: 15px 0;
             font-family: 'Courier New', monospace;
             text-align: center;
             border-bottom: 3px solid #00ff00;
@@ -158,43 +175,53 @@
                 position: static;
                 width: 100%;
             }
+            
+            .header-image {
+                height: 80px;
+                font-size: 1.2em;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Термінал-банер -->
-    <div class="terminal-banner">
+    <!-- Верхній колонтитул з зображенням -->
+    <div class="header-image">
         Міняйлівська гімназія Петропавлівської сільської ради Білгород-Дністровського району Одеської області
+    </div>
+    
+    <!-- Термінал -->
+    <div class="terminal">
+        Кабінет інформатики - сучасні технології навчання
     </div>
     
     <!-- Головне меню -->
     <div class="nav-container">
         <ul class="main-menu">
-            <li class="menu-item"><a href="#">Home</a></li>
-            <li class="menu-item"><a href="#">Bebras</a></li>
-            <li class="menu-item"><a href="#">Safe Internet</a></li>
+            <li class="menu-item"><a href="#">Головна сторінка</a></li>
+            <li class="menu-item"><a href="#">Бобер</a></li>
+            <li class="menu-item"><a href="#">Безпечний Інтернет</a></li>
             <li class="menu-item dropdown">
-                <a href="#">Lessons</a>
+                <a href="#">Уроки</a>
                 <div class="dropdown-menu">
-                    <a href="#">All-Ukrainian Internet Olympiad in IT</a>
-                    <a href="#">Open lessons</a>
-                    <a href="#">5th grade</a>
-                    <a href="#">6th grade</a>
-                    <a href="#">7th grade</a>
-                    <a href="#">8th grade</a>
-                    <a href="#">9th grade</a>
-                    <a href="#">10th grade</a>
-                    <a href="#">11th grade</a>
-                    <a href="#">Textbooks</a>
-                    <a href="#">Practical works</a>
+                    <a href="#">Всеукраїнська учнівська Інтернет-олімпіада з інформаційних технологій</a>
+                    <a href="#">Відкриті уроки</a>
+                    <a href="#">5 клас</a>
+                    <a href="#">6 клас</a>
+                    <a href="#">7 клас</a>
+                    <a href="#">8 клас</a>
+                    <a href="#">9 клас</a>
+                    <a href="#">10 клас</a>
+                    <a href="#">11 клас</a>
+                    <a href="#">Підручники</a>
+                    <a href="#">Практичні роботи</a>
                 </div>
             </li>
             <li class="menu-item dropdown">
-                <a href="#">Software</a>
+                <a href="#">Програмне забезпечення</a>
                 <div class="dropdown-menu">
-                    <a href="#">Student Internet projects</a>
+                    <a href="#">Інтернет-проекти учнів</a>
                     <a href="#">Linux</a>
-                    <a href="#">Python programming</a>
+                    <a href="#">Програмування Python</a>
                     <a href="#">Paint - online</a>
                 </div>
             </li>
@@ -207,7 +234,7 @@
         
         <p><a href="https://sites.google.com/view/gimnasiu">← Перейти назад до Iнтернет-сайту Міняйлівської гімназії</a></p>
         
-        <h2>Інформатична тека на Google Drive</h2>
+        <h2><a href="https://sites.google.com/view/gimnasiu0">Інформатична тека на Google Drive</a></h2>
         
         <h2>На уроці інформатики</h2>
         <p>Google Chromebook на уроках інформатики</p>
