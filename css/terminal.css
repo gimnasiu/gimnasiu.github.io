@@ -1,1 +1,69 @@
+/* Контейнер терміналу */
+.terminal-container {
+    background-color: #1e1e1e;
+    padding: 20px 0;
+}
 
+/* Сам термінал */
+.terminal {
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #1e1e1e;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+/* Заголовок терміналу */
+.terminal-header {
+    display: flex;
+    align-items: center;
+    background-color: #333;
+    padding: 8px 15px;
+}
+
+.terminal-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.control {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.control.close { background-color: #ff5f56; }
+.control.minimize { background-color: #ffbd2e; }
+.control.maximize { background-color: #27c93f; }
+
+.terminal-title {
+    color: #aaa;
+    font-size: 0.9em;
+    margin-left: 15px;
+}
+
+/* Тіло терміналу */
+.terminal-body {
+    padding: 15px;
+    color: #f0f0f0;
+    font-family: 'Courier New', monospace;
+    line-height: 1.5;
+    min-height: 120px;
+}
+
+/* Курсор */
+.cursor {
+    display: inline-block;
+    width: 8px;
+    height: 16px;
+    background-color: #00ff00;
+    animation: blink 1s infinite;
+    vertical-align: middle;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
