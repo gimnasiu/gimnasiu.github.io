@@ -1,1 +1,164 @@
 
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кабінет інформатики - Міняйлівська гімназія</title>
+    <style>
+        /* Новий стиль для body з фоновим зображенням */
+        body {
+            margin: 0;
+            padding: 0;
+            background: url('images/header-bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            position: relative;
+        }
+        
+        /* Затемнення фону для кращої читабельності */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+        
+        /* Стилі для терміналу */
+        .terminal-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .terminal {
+            width: 80%;
+            max-width: 800px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 25px rgba(0, 255, 0, 0.2);
+            overflow: hidden;
+            color: #00ff00;
+            backdrop-filter: blur(5px);
+            margin-bottom: 40px;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            color: rgba(204, 204, 204, 0.8);
+            font-size: 0.8em;
+        }
+        
+        .terminal-controls {
+            display: flex;
+            margin-right: 10px;
+        }
+        
+        .control {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .close { background-color: #ff5f56; }
+        .minimize { background-color: #ffbd2e; }
+        .maximize { background-color: #27c93f; }
+        
+        .terminal-title {
+            opacity: 0.8;
+            font-weight: bold;
+        }
+        
+        .terminal-body {
+            min-height: 100px;
+        }
+        
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background-color: #00ff00;
+            animation: blink 1s infinite;
+            vertical-align: middle;
+            margin-left: 5px;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        /* Адаптація для мобільних пристроїв */
+        @media (max-width: 768px) {
+            .terminal {
+                width: 90%;
+                font-size: 1em;
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+            
+            body {
+                align-items: center;
+                background-size: auto 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal-container">
+        <div class="terminal">
+            <div class="terminal-header">
+                <div class="terminal-controls">
+                    <div class="control close"></div>
+                    <div class="control minimize"></div>
+                    <div class="control maximize"></div>
+                </div>
+                <div class="terminal-title">Міняйлівська гімназія Петропавлівської сільської ради</div>
+            </div>
+            <div class="terminal-body" id="terminalOutput">
+                > Ласкаво просимо до кабінету інформатики<span class="cursor"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Динамічний текст для терміналу (опціонально)
+        const phrases = [
+            "> Завантаження системи...",
+            "> Ініціалізація навчальних матеріалів...",
+            "> Готово до використання!"
+        ];
+        
+        let currentPhrase = 0;
+        const terminal = document.getElementById('terminalOutput');
+        
+        function typeText() {
+            if (currentPhrase < phrases.length) {
+                terminal.innerHTML = phrases[currentPhrase] + '<span class="cursor"></span>';
+                currentPhrase++;
+                setTimeout(typeText, 2000);
+            }
+        }
+        
+        // Запуск анімації через 1.5 сек після завантаження
+        setTimeout(typeText, 1500);
+    </script>
+</body>
+</html>
