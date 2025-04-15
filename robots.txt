@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /private/    # Якщо є закриті розділи
+Disallow: /tmp/        # Або тимчасові файли
+Sitemap: https://gimnasiu.github.io/sitemap.xml
