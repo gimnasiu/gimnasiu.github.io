@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Таблиці Успішності</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 15px;
+        }
+        table {
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 12px;
+            background-color: transparent; /* No background for the table itself */
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 4px 6px;
+            text-align: center;
+            vertical-align: middle;
+            min-width: 40px;
+        }
+        /* Styles for the header of the 'Моніторинг якості знань учнів' table */
+        #table-rivni thead.header-pink th, 
+        #table-rivni tbody th.header-pink  /* For subject name row headers and 'Усі предмети' */
+        {
+            background-color: #FFDDEE;
+        }
+         /* Style for '№ п/п' and 'Середній бал' headers in 'Редагування даних моніторингу' */
+        #table-baly th.header-pink {
+            background-color: #DDEEFF; /* Example: Light blue for these specific headers */
+        }
+
+        .text-left { text-align: left; }
+        td[contenteditable="true"], th.editable-header {
+            outline: 1px dashed #ccc;
+        }
+        td[contenteditable="true"]:focus, th.editable-header:focus {
+            outline: 2px solid dodgerblue;
+            background-color: #e6f2ff !important; /* Use important to override random bg on focus */
+        }
+        .calculated-value, .average-score-cell { font-weight: bold; }
+        .input-error { background-color: #ffdddd !important; } /* Important to override random bg */
+        .controls-container button {
+            padding: 8px 12px;
+            margin: 0 10px 10px 0;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        .controls-container button:hover {
+            background-color: #45a049;
+        }
+        .controls-container button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        #file-importer { display: none; }
+        .table-title-center {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="controls-container" style="margin-bottom: 10px;">
+    <button id="export-xls-button">Експортувати у таблицю з розширенням *.xls</button>
+    <button id="export-doc-button">Експортувати у документ з розширенням .doc</button>
+</div>
+
+<div class="table-title-center">
+    <h2>Моніторинг якості знань учнів</h2>
+</div>
+<table id="table-rivni">
+    <thead class="header-pink">
+        <tr>
+            <th rowspan="3">Предмет</th>
+            <th rowspan="3">Кількість учнів</th>
+            <th colspan="8">Рівні досягнень</th>
+            <th rowspan="3" style="min-width: 100px;">Якість знань<br>(високий +<br>достатній)</th>
+        </tr>
+        <tr>
+            <th colspan="2">Високий<br>(10-12 балів)</th>
+            <th colspan="2">Достатній<br>(7-9 балів)</th>
+            <th colspan="2">Середній<br>(4-6 балів)</th>
+            <th colspan="2">Низький<br>(1-3 бали)</th>
+        </tr>
+        <tr>
+            <th>К-сть уч.</th> <th>%</th> <th>К-сть уч.</th> <th>%</th>
+            <th>К-сть уч.</th> <th>%</th> <th>К-сть уч.</th> <th>%</th>
+        </tr>
+    </thead>
+    <tbody id="rivni-tbody">
+        <tr id="rivni-row-summary">
+            <th class="text-left header-pink">Усі предмети</th>
+            <td id="total-students-summary" class="calculated-value">0</td>
+            <td id="vysokyi-kilkist-summary" class="calculated-value">0</td>
+            <td id="vysokyi-percent-summary" class="calculated-value">0.0</td>
+            <td id="dostatniy-kilkist-summary" class="calculated-value">0</td>
+            <td id="dostatniy-percent-summary" class="calculated-value">0.0</td>
+            <td id="seredniy-kilkist-summary" class="calculated-value">0</td>
+            <td id="seredniy-percent-summary" class="calculated-value">0.0</td>
+            <td id="nyzkyi-kilkist-summary" class="calculated-value">0</td>
+            <td id="nyzkyi-percent-summary" class="calculated-value">0.0</td>
+            <td id="yakist-znan-summary" class="calculated-value">0%</td>
+        </tr>
+    </tbody>
+</table>
+
+<div style="display: flex; flex-wrap: wrap; align-items: center; margin-top: 30px; margin-bottom: 0px;" class="controls-container">
+    <h2 style="margin: 0 15px 10px 0;">Редагування даних моніторингу</h2>
+    <button id="add-subject-button">Додати предмет</button>
+    <button id="remove-subject-button">Вилучити предмет</button>
+    <button id="export-data-button">Зберегти (export) введені дані</button>
+    <button id="import-data-button">Відновити (іmport) введені дані</button>
+    <input type="file" id="file-importer" accept=".json">
+</div>
+<table id="table-baly">
+    <thead>
+        <tr id="baly-header-row">
+            <th class="header-pink">№ п/п</th>
+            <!-- Subject headers dynamically inserted here -->
+            <!-- "Середній бал" header will be appended last by JS -->
+        </tr>
+    </thead>
+    <tbody id="baly-tbody">
+        <!-- Student rows (1-20) for scores dynamically generated -->
+    </tbody>
+</table>
+
+<script>
+    // --- Global Helper Functions ---
+    const calculateRawPercent = (value, total) => total > 0 ? ((value / total) * 100).toFixed(1) : '0.0';
+
+document.addEventListener('DOMContentLoaded', () => {
+    const MAX_SUBJECTS = 25;
+    const STUDENT_ROW_COUNT = 20;
+    const LIGHT_BG_COLORS = ['#FFFFE0', '#E0FFFF', '#FFE4E1', '#F0FFF0', '#FAFAD2', '#ADD8E6', '#FFEFD5', '#F5FFFA', '#FFF0F5', '#FFFACD'];
+
+
+    let subjectsData = [];
+
+    const tableBalyHeaderRow = document.getElementById('baly-header-row');
+    const tableBalyBody = document.getElementById('baly-tbody');
+    const tableRivniBody = document.getElementById('rivni-tbody');
+    const summaryRowInRivni = document.getElementById('rivni-row-summary');
+    const addSubjectButton = document.getElementById('add-subject-button');
+    const removeSubjectButton = document.getElementById('remove-subject-button');
+    const exportDataButton = document.getElementById('export-data-button');
+    const importDataButton = document.getElementById('import-data-button');
+    const fileImporter = document.getElementById('file-importer');
+
+    let avgHeaderCellInBalyTable = null; 
+
+    function getRandomLightColor() {
+        return LIGHT_BG_COLORS[Math.floor(Math.random() * LIGHT_BG_COLORS.length)];
+    }
+
+    function initializeBalyTableStructure() {
+        tableBalyBody.innerHTML = '';
+        avgHeaderCellInBalyTable = document.createElement('th');
+        avgHeaderCellInBalyTable.className = 'header-pink';
+        avgHeaderCellInBalyTable.textContent = 'Середній бал';
+
+        for (let i = 1; i <= STUDENT_ROW_COUNT; i++) {
+            const tr = document.createElement('tr');
+            const tdNum = document.createElement('td');
+            tdNum.textContent = i;
+            tr.appendChild(tdNum);
+            const tdAvg = document.createElement('td');
+            tdAvg.className = 'calculated-value average-score-cell';
+            tdAvg.id = `avg-score-row-${i}`;
+            tdAvg.textContent = '0.0';
+            tr.appendChild(tdAvg);
+            tableBalyBody.appendChild(tr);
+        }
+    }
+
+    function createSubject(name, importedScores = null, importedColor = null) {
+        if (subjectsData.length >= MAX_SUBJECTS) {
+            addSubjectButton.disabled = true;
+            return null;
+        }
+
+        const subjectId = `subj${subjectsData.length + 1}`;
+        const subjectColor = importedColor || getRandomLightColor();
+
+        const newBalyTh = document.createElement('th');
+        newBalyTh.className = 'editable-header';
+        newBalyTh.style.backgroundColor = subjectColor;
+        newBalyTh.textContent = name;
+        newBalyTh.contentEditable = "true";
+        newBalyTh.dataset.subjectId = subjectId;
+        tableBalyHeaderRow.insertBefore(newBalyTh, avgHeaderCellInBalyTable);
+
+        const balyBodyRows = tableBalyBody.querySelectorAll('tr');
+        balyBodyRows.forEach((row, rowIndex) => {
+            const newScoreTd = document.createElement('td');
+            newScoreTd.classList.add('input-score');
+            newScoreTd.style.backgroundColor = subjectColor;
+            newScoreTd.dataset.subjectId = subjectId;
+            newScoreTd.contentEditable = "true";
+            if (importedScores && importedScores[rowIndex] !== undefined && importedScores[rowIndex] !== null) {
+                newScoreTd.textContent = importedScores[rowIndex];
+            }
+            const lastCellInRow = row.cells[row.cells.length - 1];
+            row.insertBefore(newScoreTd, lastCellInRow);
+        });
+
+        const newRivniTr = document.createElement('tr');
+        newRivniTr.id = `rivni-row-${subjectId}`;
+        const rivniThLabel = document.createElement('th');
+        rivniThLabel.className = 'text-left header-pink'; // Keep this style for row header
+        rivniThLabel.id = `rivni-label-${subjectId}`;
+        rivniThLabel.textContent = name;
+        newRivniTr.appendChild(rivniThLabel);
+
+        const stats = ['total-students', 'vysokyi-kilkist', 'vysokyi-percent', 'dostatniy-kilkist', 'dostatniy-percent', 'seredniy-kilkist', 'seredniy-percent', 'nyzkyi-kilkist', 'nyzkyi-percent', 'yakist-znan'];
+        const rivniCellsForSubject = {};
+        stats.forEach(statName => {
+            const td = document.createElement('td');
+            // Critical: Ensure these IDs are unique and match what calculateAndDisplayAllLevels expects
+            td.id = `${statName.replace(/-/g, '')}-${subjectId}`; // Use consistent ID generation as in calculate function
+            td.className = 'calculated-value';
+            td.textContent = (statName.includes('percent') || statName.includes('yakist')) ? '0.0' + (statName.includes('yakist') ? '%' : '') : '0';
+            newRivniTr.appendChild(td);
+            rivniCellsForSubject[statName.replace(/-/g, '')] = td;
+        });
+        tableRivniBody.insertBefore(newRivniTr, summaryRowInRivni);
+
+        const subjectInfo = {
+            id: subjectId,
+            name: name,
+            color: subjectColor,
+            balyHeaderElement: newBalyTh,
+            rivniLabelElement: rivniThLabel,
+            rivniCells: rivniCellsForSubject, // Store direct references to the DOM elements
+            counts: { vysokyi: 0, dostatniy: 0, seredniy: 0, nyzkyi: 0 },
+            totalValidScores: 0
+        };
+        subjectsData.push(subjectInfo);
+
+        newBalyTh.addEventListener('input', () => {
+            const newName = newBalyTh.textContent.trim() || `Предмет ${subjectInfo.id.replace('subj', '')}`;
+            subjectInfo.name = newName;
+            subjectInfo.rivniLabelElement.textContent = newName;
+            if (newBalyTh.textContent.trim() === "") newBalyTh.textContent = newName;
+        });
+        
+        removeSubjectButton.disabled = false;
+        if (subjectsData.length >= MAX_SUBJECTS) addSubjectButton.disabled = true;
+        
+        return subjectInfo;
+    }
+    
+    function removeLastSubject() {
+        if (subjectsData.length === 0) {
+            removeSubjectButton.disabled = true;
+            return;
+        }
+        
+        const lastSubject = subjectsData.pop();
+        if (!lastSubject) return;
+
+        lastSubject.balyHeaderElement.remove();
+        const scoreCellsToRemove = document.querySelectorAll(`td.input-score[data-subject-id="${lastSubject.id}"]`);
+        scoreCellsToRemove.forEach(cell => cell.remove());
+        const rivniRowToRemove = document.getElementById(`rivni-row-${lastSubject.id}`);
+        if (rivniRowToRemove) rivniRowToRemove.remove();
+
+        addSubjectButton.disabled = false;
+        if (subjectsData.length === 0) removeSubjectButton.disabled = true;
+        calculateAndDisplayAllLevels();
+    }
+
+
+    function calculateAndDisplayRowAverages() {
+        const balyBodyRows = tableBalyBody.querySelectorAll('tr');
+        balyBodyRows.forEach(row => {
+            let sumOfScores = 0;
+            let countOfScores = 0;
+            const scoreCellsInRow = row.querySelectorAll('td.input-score');
+            scoreCellsInRow.forEach(cell => {
+                const scoreText = cell.textContent.trim();
+                if (scoreText !== "") {
+                    const score = parseFloat(scoreText);
+                    if (!isNaN(score)) { sumOfScores += score; countOfScores++; }
+                }
+            });
+            const average = countOfScores > 0 ? (sumOfScores / countOfScores).toFixed(1) : '0.0';
+            const avgCell = row.querySelector('td.average-score-cell');
+            if (avgCell) avgCell.textContent = average;
+        });
+    }
+
+    function calculateAndDisplayAllLevels() {
+        const overallCounts = { vysokyi: 0, dostatniy: 0, seredniy: 0, nyzkyi: 0 };
+        let overallTotalValidScores = 0;
+
+        subjectsData.forEach(subject => {
+            subject.counts = { vysokyi: 0, dostatniy: 0, seredniy: 0, nyzkyi: 0 };
+            subject.totalValidScores = 0;
+            const scoreCells = document.querySelectorAll(`td.input-score[data-subject-id="${subject.id}"]`);
+            scoreCells.forEach(cell => {
+                const text = cell.textContent.trim();
+                if (text === "") return;
+                const score = parseFloat(text);
+                subject.totalValidScores++;
+                if (score >= 10 && score <= 12) subject.counts.vysokyi++;
+                else if (score >= 7 && score <= 9) subject.counts.dostatniy++;
+                else if (score >= 4 && score <= 6) subject.counts.seredniy++;
+                else if (score >= 1 && score <= 3) subject.counts.nyzkyi++;
+            });
+
+            // Update DOM for this subject's row in "Рівні досягнень" using stored rivniCells
+            if (subject.rivniCells.totalstudents) subject.rivniCells.totalstudents.textContent = subject.totalValidScores;
+            if (subject.rivniCells.vysokyikilkist) subject.rivniCells.vysokyikilkist.textContent = subject.counts.vysokyi;
+            if (subject.rivniCells.vysokyipercent) subject.rivniCells.vysokyipercent.textContent = calculateRawPercent(subject.counts.vysokyi, subject.totalValidScores);
+            if (subject.rivniCells.dostatniykilkist) subject.rivniCells.dostatniykilkist.textContent = subject.counts.dostatniy;
+            if (subject.rivniCells.dostatniypercent) subject.rivniCells.dostatniypercent.textContent = calculateRawPercent(subject.counts.dostatniy, subject.totalValidScores);
+            if (subject.rivniCells.seredniykilkist) subject.rivniCells.seredniykilkist.textContent = subject.counts.seredniy;
+            if (subject.rivniCells.seredniypercent) subject.rivniCells.seredniypercent.textContent = calculateRawPercent(subject.counts.seredniy, subject.totalValidScores);
+            if (subject.rivniCells.nyzkyikilkist) subject.rivniCells.nyzkyikilkist.textContent = subject.counts.nyzkyi;
+            if (subject.rivniCells.nyzkyipercent) subject.rivniCells.nyzkyipercent.textContent = calculateRawPercent(subject.counts.nyzkyi, subject.totalValidScores);
+            const yakistZnanValue = subject.counts.vysokyi + subject.counts.dostatniy;
+            if (subject.rivniCells.yakistznan) subject.rivniCells.yakistznan.textContent = calculateRawPercent(yakistZnanValue, subject.totalValidScores) + '%';
+            
+            overallCounts.vysokyi += subject.counts.vysokyi;
+            overallCounts.dostatniy += subject.counts.dostatniy;
+            overallCounts.seredniy += subject.counts.seredniy;
+            overallCounts.nyzkyi += subject.counts.nyzkyi;
+            overallTotalValidScores += subject.totalValidScores;
+        });
+        document.getElementById('total-students-summary').textContent = overallTotalValidScores;
+        document.getElementById('vysokyi-kilkist-summary').textContent = overallCounts.vysokyi;
+        document.getElementById('vysokyi-percent-summary').textContent = calculateRawPercent(overallCounts.vysokyi, overallTotalValidScores);
+        document.getElementById('dostatniy-kilkist-summary').textContent = overallCounts.dostatniy;
+        document.getElementById('dostatniy-percent-summary').textContent = calculateRawPercent(overallCounts.dostatniy, overallTotalValidScores);
+        document.getElementById('seredniy-kilkist-summary').textContent = overallCounts.seredniy;
+        document.getElementById('seredniy-percent-summary').textContent = calculateRawPercent(overallCounts.seredniy, overallTotalValidScores);
+        document.getElementById('nyzkyi-kilkist-summary').textContent = overallCounts.nyzkyi;
+        document.getElementById('nyzkyi-percent-summary').textContent = calculateRawPercent(overallCounts.nyzkyi, overallTotalValidScores);
+        const overallYakistZnanValue = overallCounts.vysokyi + overallCounts.dostatniy;
+        document.getElementById('yakist-znan-summary').textContent = calculateRawPercent(overallYakistZnanValue, overallTotalValidScores) + '%';
+        calculateAndDisplayRowAverages();
+    }
+    
+    let currentTextBeforeInput = "";
+    function handleScoreCellInput(event) {
+        const currentCell = event.target;
+        let value = currentCell.textContent;
+        let cleanedValue = value.replace(/[^0-9]/g, '');
+        if (cleanedValue === "") {
+            currentCell.textContent = "";
+        } else {
+            const num = parseInt(cleanedValue, 10);
+            if (isNaN(num) || num < 1 || num > 12) {
+                currentCell.classList.add('input-error');
+                currentCell.textContent = currentTextBeforeInput.slice(0,currentTextBeforeInput.search(/[^0-9]/)) || "";
+                setTimeout(() => currentCell.classList.remove('input-error'), 1500);
+            } else {
+                const stringNum = String(num);
+                if (currentCell.textContent !== stringNum) {
+                     currentCell.textContent = stringNum;
+                     const range = document.createRange(); const sel = window.getSelection();
+                     if (currentCell.childNodes.length > 0) { range.setStart(currentCell.childNodes[0], stringNum.length); range.collapse(true); }
+                     else { range.selectNodeContents(currentCell); range.collapse(false); }
+                     sel.removeAllRanges(); sel.addRange(range);
+                }
+            }
+        }
+        calculateAndDisplayAllLevels();
+    }
+
+    function handleScoreCellKeydown(event) {
+        const currentCell = event.target;
+        const key = event.key;
+        currentTextBeforeInput = currentCell.textContent;
+
+        if (key === 'Enter') { event.preventDefault(); return; }
+        
+        if (key.startsWith('Arrow')) {
+            handleNavigationKeydown(event);
+            return; 
+        }
+        const isControlKey = ['Backspace', 'Delete', 'Tab', 'Home', 'End'].includes(key);
+        if (isControlKey || event.ctrlKey || event.metaKey || event.altKey) return;
+        
+        if (!/^[0-9]$/.test(key)) { event.preventDefault(); return; }
+        
+        const selection = window.getSelection();
+        if (currentCell.textContent.length >= 2 && (!selection || selection.toString().length === 0)) {
+            event.preventDefault();
+        }
+    }
+    
+    function handleNavigationKeydown(event) {
+        const currentCell = event.target;
+        if (currentCell.tagName !== 'TD' || !currentCell.isContentEditable || !event.key.startsWith('Arrow')) return;
+
+        let nextCellToFocus = null;
+        const currentRow = currentCell.parentElement;
+        const currentCellIndexInRow = Array.from(currentRow.cells).indexOf(currentCell);
+        const currentRowIndexInBody = Array.from(tableBalyBody.children).indexOf(currentRow);
+
+        if (event.key === 'ArrowUp') {
+            if (currentRowIndexInBody > 0) {
+                const prevRow = tableBalyBody.rows[currentRowIndexInBody - 1];
+                if (prevRow.cells[currentCellIndexInRow] && prevRow.cells[currentCellIndexInRow].isContentEditable) {
+                    nextCellToFocus = prevRow.cells[currentCellIndexInRow];
+                }
+            }
+        } else if (event.key === 'ArrowDown') {
+            if (currentRowIndexInBody < tableBalyBody.rows.length - 1) {
+                const nextRow = tableBalyBody.rows[currentRowIndexInBody + 1];
+                 if (nextRow.cells[currentCellIndexInRow] && nextRow.cells[currentCellIndexInRow].isContentEditable) {
+                    nextCellToFocus = nextRow.cells[currentCellIndexInRow];
+                }
+            }
+        } else if (event.key === 'ArrowLeft') {
+            const selection = window.getSelection();
+            if (selection && selection.rangeCount > 0 && selection.getRangeAt(0).startOffset === 0) {
+                for (let i = currentCellIndexInRow - 1; i > 0; i--) {
+                    if (currentRow.cells[i] && currentRow.cells[i].isContentEditable) {
+                        nextCellToFocus = currentRow.cells[i]; break;
+                    }
+                }
+            } else return; 
+        } else if (event.key === 'ArrowRight') {
+            const selection = window.getSelection();
+             if (selection && selection.rangeCount > 0 && selection.getRangeAt(0).startOffset === currentCell.textContent.length) {
+                for (let i = currentCellIndexInRow + 1; i < currentRow.cells.length; i++) {
+                    if (currentRow.cells[i] && currentRow.cells[i].isContentEditable && !currentRow.cells[i].classList.contains('average-score-cell')) {
+                        nextCellToFocus = currentRow.cells[i]; break;
+                    }
+                }
+            } else return; 
+        }
+        
+        if (nextCellToFocus) {
+            event.preventDefault();
+            nextCellToFocus.focus();
+            const range = document.createRange(); range.selectNodeContents(nextCellToFocus);
+            const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+        }
+    }
+
+    function updateAndAttachListenersToAllEditableCells() {
+        const allScoreCells = tableBalyBody.querySelectorAll('td.input-score');
+        allScoreCells.forEach(cell => {
+            cell.removeEventListener('input', handleScoreCellInput);
+            cell.removeEventListener('keydown', handleScoreCellKeydown);
+            cell.addEventListener('input', handleScoreCellInput);
+            cell.addEventListener('keydown', handleScoreCellKeydown);
+        });
+    }
+    
+    function clearAllDynamicDataAndUI() {
+        subjectsData = [];
+        const balyHeaders = Array.from(tableBalyHeaderRow.children);
+        for (let i = balyHeaders.length - 1; i > 0; i--) {
+             tableBalyHeaderRow.removeChild(balyHeaders[i]);
+        }
+        const rivniRows = Array.from(tableRivniBody.children);
+        rivniRows.forEach(row => {
+            if (row.id !== 'rivni-row-summary') tableRivniBody.removeChild(row);
+        });
+        initializeBalyTableStructure();
+        tableBalyHeaderRow.appendChild(avgHeaderCellInBalyTable);
+        addSubjectButton.disabled = false;
+        removeSubjectButton.disabled = true;
+    }
+
+    addSubjectButton.addEventListener('click', () => {
+        if (subjectsData.length >= MAX_SUBJECTS) {
+            alert(`Недоступно. Максимум ${MAX_SUBJECTS} предметів. Виконайте нову таблицю!`);
+            addSubjectButton.disabled = true; return;
+        }
+        const newSubject = createSubject(`Предмет ${subjectsData.length + 1}`);
+        if (newSubject) {
+            updateAndAttachListenersToAllEditableCells();
+            calculateAndDisplayAllLevels();
+            newSubject.balyHeaderElement.focus();
+        }
+    });
+    
+    removeSubjectButton.addEventListener('click', () => {
+        if (subjectsData.length === 0) {
+            alert("Немає предметів для вилучення.");
+            return;
+        }
+        const lastSubjectName = subjectsData[subjectsData.length - 1].name;
+        const confirmation = confirm(`Увага! Видаляється "${lastSubjectName}". Відновлення неможливе, якщо не зробили збереження введених даних. Продовжити?`);
+        if (confirmation) {
+            removeLastSubject();
+        }
+    });
+
+    exportDataButton.addEventListener('click', () => {
+        const exportObj = {
+            subjects: subjectsData.map(subject => {
+                const scores = [];
+                const scoreCells = document.querySelectorAll(`td.input-score[data-subject-id="${subject.id}"]`);
+                scoreCells.forEach(cell => scores.push(cell.textContent.trim()));
+                return { name: subject.name, scores: scores, color: subject.color };
+            })
+        };
+        const date = new Date();
+        const filename = `monitoring_export_${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}_${String(date.getHours()).padStart(2,'0')}-${String(date.getMinutes()).padStart(2,'0')}-${String(date.getSeconds()).padStart(2,'0')}.json`;
+        downloadFile(JSON.stringify(exportObj, null, 2), filename, 'application/json');
+    });
+
+    importDataButton.addEventListener('click', () => fileImporter.click());
+    fileImporter.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const importedData = JSON.parse(e.target.result);
+                if (!importedData.subjects || !Array.isArray(importedData.subjects)) throw new Error("Невірний формат: відсутнє поле 'subjects' або воно не є масивом.");
+                clearAllDynamicDataAndUI();
+                importedData.subjects.slice(0, MAX_SUBJECTS).forEach(subjToImport => {
+                     createSubject(subjToImport.name, subjToImport.scores, subjToImport.color);
+                });
+                updateAndAttachListenersToAllEditableCells();
+                calculateAndDisplayAllLevels();
+                if (subjectsData.length >= MAX_SUBJECTS) addSubjectButton.disabled = true;
+                else addSubjectButton.disabled = false;
+                removeSubjectButton.disabled = subjectsData.length === 0;
+            } catch (err) {
+                alert(`Помилка імпорту: ${err.message}`);
+            } finally {
+                fileImporter.value = '';
+            }
+        };
+        reader.readAsText(file);
+    });
+    
+    function initializeBaseUI() {
+        clearAllDynamicDataAndUI();
+        // Optionally create some default subjects here if needed
+        // createSubject("Математика");
+        // createSubject("Українська мова");
+        updateAndAttachListenersToAllEditableCells();
+        calculateAndDisplayAllLevels();
+    }
+    initializeBaseUI();
+
+    function downloadFile(content, fileName, contentType) {
+        const a = document.createElement("a");
+        const file = new Blob([content], { type: contentType });
+        a.href = URL.createObjectURL(file); a.download = fileName;
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        URL.revokeObjectURL(a.href);
+    }
+    document.getElementById('export-xls-button').addEventListener('click', function() {
+        const table = document.getElementById('table-rivni'); if (!table) return;
+        const tableClone = table.cloneNode(true); const tableHTML = tableClone.outerHTML;
+        const excelContent = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Рівні</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><style>table,th,td{border:1px solid black;border-collapse:collapse;text-align:center;vertical-align:middle;font-size:10pt;}#table-rivni thead.header-pink th,#table-rivni tbody th.header-pink{background-color:#FFDDEE;}.text-left{text-align:left;}.calculated-value{font-weight:bold;}</style></head><body><h2>Моніторинг якості знань учнів</h2>${tableHTML}</body></html>`;
+        downloadFile(excelContent, 'monitoring_rivni.xls', 'application/vnd.ms-excel');
+    });
+    document.getElementById('export-doc-button').addEventListener('click', function() {
+        const table = document.getElementById('table-rivni'); if (!table) return;
+        const tableClone = table.cloneNode(true); const tableHTML = tableClone.outerHTML;
+        const docContent = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Моніторинг якості знань учнів</title><style>body{font-family:Arial,sans-serif;}table,th,td{border:1px solid black;border-collapse:collapse;padding:4px;text-align:center;vertical-align:middle;font-size:10pt;}#table-rivni thead.header-pink th,#table-rivni tbody th.header-pink{background-color:#FFDDEE;}.text-left{text-align:left;}.calculated-value{font-weight:bold;}h2{text-align:center;}</style></head><body><h2>Моніторинг якості знань учнів</h2>${tableHTML}</body></html>`;
+        downloadFile(docContent, 'monitoring_rivni.doc', 'application/msword');
+    });
+});
+</script>
+
+</body>
+</html>
